@@ -7,7 +7,7 @@ fi
 
 # Install packages
 
-#yum -y update
+yum -y update
 
 yum -y install git
 
@@ -15,13 +15,13 @@ yum -y install vim
 
 yum -y install python3
 
-yum -y install python3-pyvmomi
-
 yum -y install python3-dns
 
 yum -y install python3-netaddr
 
 yum -y install epel-release
+
+yum -y install python3-pyvmomi
 
 yum -y install ansible
 
@@ -43,12 +43,16 @@ echo 'export OVFTOOL_LOCATION='$OVFTOOL_LOCATION
 curl -SLo ovftool.bundle $OVFTOOL_LOCATION
 chmod u+x ovftool.bundle
 ./ovftool.bundle
+rm -rf ovftool.bundle
 
-# Setup Modules for NSX-t due to VMware not setting up Ansible Galaxy properly :(
+# Fix Ovftool dependancy error
+yum -y install libnsl
+
+# Setup Modules for NSX-T due to VMware not setting up Ansible Galaxy properly :(
 git clone https://github.com/vmware/ansible-for-nsxt.git
-cp -R ansible-for-nsxt/plugins/modules/ /usr/share/ansible/plugins/modules/
-cp -R ansible-for-nsxt/plugins/module_utils/ /usr/share/ansible/plugins/module_utils/
-cp -R ansible-for-nsxt/plugins/doc_fragments/ /usr/share/ansible/plugins/doc_fragments/
+cp -R ansible-for-nsxt/plugins/modules/ /usr/share/ansible/plugins/
+cp -R ansible-for-nsxt/plugins/module_utils/ /usr/share/ansible/plugins/
+cp -R ansible-for-nsxt/plugins/doc_fragments/ /usr/share/ansible/plugins/
 
 # Install Ansible roles
 
@@ -75,7 +79,7 @@ fi
 
 # Configure VIM
 
-FILE=/home/$LAB_USER/.vimrc
+FILE=/root/.vimrc
 if [ ! -f  "$FILE" ]; then
     touch "$FILE"
     chown $LAB_USER:$LAB_USER "$FILE"
