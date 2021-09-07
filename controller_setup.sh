@@ -27,7 +27,7 @@ yum -y install ansible
 
 yum -y install xrdp
 
-pip install --upgrade pyvmomi pyvim requests
+pip3 install --upgrade pyvmomi pyvim requests
 
 # Install Atom
 
@@ -42,8 +42,7 @@ read -p 'OVF Tool location: ' OVFTOOL_LOCATION
 echo 'export OVFTOOL_LOCATION='$OVFTOOL_LOCATION
 curl -SLo ovftool.bundle $OVFTOOL_LOCATION
 chmod u+x ovftool.bundle
-./ovftool.bundle
-rm -rf ovftool.bundle
+./ovftool.bundle --eulas-agreed --required --console
 
 # Fix Ovftool dependancy error
 yum -y install libnsl
